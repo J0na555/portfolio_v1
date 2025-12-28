@@ -20,13 +20,13 @@ const TerminalExplorer: React.FC<TerminalExplorerProps> = ({ projects }) => {
     const selectedProject = projects[selectedIndex];
 
     const getFileName = (serviceName: string) => {
-        return serviceName.toLowerCase().replace(/\s+/g, '_') + '.service';
+        return serviceName.toLowerCase().replace(/\s+/g, '_') + '.json';
     };
 
     return (
         <div className="w-full bg-[#ffffff05] backdrop-blur-md border border-[#ffffff10] rounded-2xl overflow-hidden">
             {/* Terminal Header */}
-            <div className="bg-[#ffffff08] border-b border-[#ffffff10] px-4 py-3 flex items-center gap-3">
+            <div className="bg-[#ffffff08] border-b border-[#ffffff10] px-3 py-3 flex items-center gap-3">
                 <pre className="text-[#1793d1] text-[3px] leading-[0.5] select-none">
                     {`⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -45,7 +45,7 @@ const TerminalExplorer: React.FC<TerminalExplorerProps> = ({ projects }) => {
 `}
                 </pre>
                 <span className="text-sm text-[var(--white-icon)] font-mono">
-                    ~/yonas/projects.bash
+                    ~/yonas/projects.zsh
                 </span>
             </div>
 
@@ -53,18 +53,19 @@ const TerminalExplorer: React.FC<TerminalExplorerProps> = ({ projects }) => {
             <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] min-h-[500px]">
                 {/* Sidebar - File Tree */}
                 <div className="border-r border-[#ffffff10] bg-[#ffffff03] p-4">
-                    <div className="text-xs text-[var(--sec)] font-mono mb-3">SERVICES/</div>
+                    <div className="text-xs text-[var(--sec)] font-mono mb-3">JSON/</div>
                     <div className="space-y-1">
                         {projects.map((project, index) => (
                             <button
                                 key={index}
                                 onClick={() => setSelectedIndex(index)}
-                                className={`w-full text-left px-3 py-2 rounded-lg font-mono text-sm transition-all duration-200 ${selectedIndex === index
+                                className={`w-full text-left px-3 py-2 rounded-lg font-mono text-sm transition-all duration-200 flex items-start gap-2 ${selectedIndex === index
                                     ? 'bg-[var(--sec)] text-[var(--background)]'
                                     : 'text-[var(--white-icon)] hover:bg-[#ffffff08] hover:text-white'
                                     }`}
                             >
-                                📄 {getFileName(project.service)}
+                                <span className="flex-shrink-0">🗂️</span>
+                                <span className="whitespace-normal break-words">{getFileName(project.service)}</span>
                             </button>
                         ))}
                     </div>
