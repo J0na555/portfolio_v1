@@ -16,13 +16,19 @@ const github = SOCIALS.find(s => s.name === "GitHub");
 
     <div class="mt-12 pt-8 border-t border-[#ffffff10]">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="text-sm text-[var(--white-icon)]">
-          Copyright © 2025 <a href={github?.url} class="text-[var(--white)] hover:underline">Yonas Girma</a>.
+        <p class="text-sm text-[var(--white-icon)] flex items-center gap-1">
+          Built with <span class="text-[var(--white)] mx-1">❤</span> by 
+          <a href={github?.url} class="text-[var(--white)] hover:underline ml-1">Yonas Girma</a>
+          <span class="inline-flex items-center gap-2 ml-2 border-l border-[#ffffff20] pl-3">
+            <span class="opacity-80" title="Coffee">☕</span>
+            <span class="opacity-40 text-[10px]">&</span>
+            <span class="opacity-80" title="AI">🤖</span>
+          </span>
         </p>
         <div class="flex gap-6 text-xs text-[var(--white-icon)]">
           <span class="flex items-center gap-2">
-             <span class="w-1.5 h-1.5 rounded-full bg-[#A9FF5B]"></span>
-             Available for hire
+              <span class="w-1.5 h-1.5 rounded-full bg-[#A9FF5B]"></span>
+              Available for hire
           </span>
         </div>
       </div>
