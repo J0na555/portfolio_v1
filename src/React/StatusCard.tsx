@@ -1,141 +1,136 @@
 import React, { useState, useEffect } from "react";
 
+interface DevStatus {
+    github: string | null;
+    leetcode: string | null;
+    codeforces: string | null;
+}
+
 const StatusCard = () => {
     const [time, setTime] = useState("");
-    const [spotify, setSpotify] = useState<any>(null);
+    const [status, setStatus] = useState<DevStatus | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const updateTime = () => {
-            const now = new Date();
-            const options: Intl.DateTimeFormatOptions = {
-                timeZone: "Africa/Addis_Ababa",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: false,
-            };
-            setTime(new Intl.DateTimeFormat("en-GB", options).format(now));
+            setTime(
+                new Intl.DateTimeFormat("en-GB", {
+                    timeZone: "Africa/Addis_Ababa",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: false,
+                }).format(new Date())
+            );
         };
-
         updateTime();
         const timer = setInterval(updateTime, 1000);
         return () => clearInterval(timer);
     }, []);
 
     useEffect(() => {
-        const fetchSpotify = async () => {
+        const fetchStatus = async () => {
             try {
-                const res = await fetch("/api/spotify");
-                const data = await res.json();
-                setSpotify(data);
-            } catch (e) {
-                console.error("Failed to fetch Spotify status");
+                const res = await fetch("/api/status");
+                if (!res.ok) throw new Error("non-ok response");
+                const data: DevStatus = await res.json();
+                setStatus(data);
+            } catch {
+                // fail silently — UI shows "—" for missing data
+            } finally {
+                setLoading(false);
             }
         };
-
-        fetchSpotify();
-        const timer = setInterval(fetchSpotify, 30000); // Update every 30s
-        return () => clearInterval(timer);
+        fetchStatus();
     }, []);
 
     return (
         <div className="flex flex-col gap-4 w-full max-w-sm mx-auto lg:mx-0">
-            <div className="bg-[#ffffff05] backdrop-blur-md border border-[#ffffff10] rounded-2xl p-5 space-y-4 hover:border-[#ffffff20] transition-colors group">
+            <div className="bg-[#ffffff05] backdrop-blur-md border border-[#ffffff10] rounded-2xl p-5 space-y-4 hover:border-[#ffffff20] transition-colors">
+
                 {/* Time and Location */}
                 <div className="flex justify-between items-start">
                     <div className="space-y-1">
-                        <p className="text-[var(--white-icon)] text-xs uppercase tracking-wider font-medium">Local Time</p>
+                        <p className="text-[var(--white-icon)] text-xs uppercase tracking-wider font-medium">
+                            Local Time
+                        </p>
                         <p className="text-2xl font-mono font-medium text-[var(--white)] tabular-nums">
                             {time || "00:00:00"}
                         </p>
                     </div>
                     <div className="text-right space-y-1">
-                        <p className="text-[var(--white-icon)] text-xs uppercase tracking-wider font-medium">Location</p>
+                        <p className="text-[var(--white-icon)] text-xs uppercase tracking-wider font-medium">
+                            Location
+                        </p>
                         <p className="text-[var(--white)] text-sm font-medium">Addis Ababa, ET</p>
                     </div>
                 </div>
 
                 <div className="h-px bg-gradient-to-r from-transparent via-[#ffffff10] to-transparent w-full" />
 
-                {/* Status */}
+                {/* Availability status */}
                 <div className="flex items-center gap-3">
                     <div className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#A9FF5B] opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-[#A9FF5B]"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#A9FF5B] opacity-75" />
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-[#A9FF5B]" />
                     </div>
                     <p className="text-[var(--white)] text-sm font-medium">
                         Open for freelance projects
                     </p>
                 </div>
 
-                {/* Current Vibe / Spotify */}
-                <div className="bg-[#a476ff10] rounded-xl p-3 border border-[#a476ff20]">
-                    <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                                className={`w-4 h-4 ${spotify?.isPlaying ? "text-[#1DB954] animate-pulse" : "text-[#a476ff]"}`}
-                            >
-                                <path d="M12 3V13.55C11.41 13.21 10.73 13 10 13C7.79 13 6 14.79 6 17C6 19.21 7.79 21 10 21C12.21 21 14 19.21 14 17V7H18V3H12Z" />
-                            </svg>
-                            <span className="text-[var(--white-icon)] text-[10px] uppercase tracking-widest font-bold">
-                                {spotify?.isPlaying ? "Now Playing" : "Last Played"}
-                            </span>
-                        </div>
-                        {spotify?.isPlaying && (
-                            <div className="flex gap-1 items-end h-3">
-                                <div className="w-0.5 bg-[#1DB954] animate-[music-bar_0.8s_ease-in-out_infinite]"></div>
-                                <div className="w-0.5 bg-[#1DB954] animate-[music-bar_1.2s_ease-in-out_infinite]"></div>
-                                <div className="w-0.5 bg-[#1DB954] animate-[music-bar_1.0s_ease-in-out_infinite]"></div>
+                {/* Terminal dev-activity block */}
+                <div className="bg-[#0a0a0a] rounded-xl border border-[#ffffff10] overflow-hidden">
+                    {/* Window chrome */}
+                    <div className="flex items-center gap-2 px-3 py-2 border-b border-[#ffffff08] bg-[#111111]">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+                        <span className="ml-2 text-[#555] text-[10px] font-mono">status</span>
+                    </div>
+
+                    {/* Terminal body */}
+                    <div className="p-3 font-mono text-[11px] space-y-1.5">
+                        {loading ? (
+                            <p className="text-[#555] animate-pulse pl-1">loading...</p>
+                        ) : (
+                            <div className="space-y-1.5 pt-0.5">
+                                <StatusLine
+                                    label="Last Commit"
+                                    value={status?.github ?? null}
+                                    labelColor="text-[#a476ff]"
+                                />
+                                <StatusLine
+                                    label="LeetCode"
+                                    value={status?.leetcode ?? null}
+                                    labelColor="text-[#f7a700]"
+                                />
+                                <StatusLine
+                                    label="Codeforces"
+                                    value={status?.codeforces ?? null}
+                                    labelColor="text-[#4fc3f7]"
+                                />
                             </div>
                         )}
                     </div>
-
-                    {spotify && spotify.title !== 'Not Integrated' ? (
-                        <a
-                            href={spotify.songUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-3 group/song"
-                        >
-                            {spotify.albumImageUrl && (
-                                <img
-                                    src={spotify.albumImageUrl}
-                                    alt={spotify.title}
-                                    className={`w-10 h-10 rounded-lg shadow-lg ${spotify.isPlaying ? "animate-[spin_10s_linear_infinite]" : ""}`}
-                                />
-                            )}
-                            <div className="min-w-0">
-                                <p className="text-white text-xs font-bold truncate group-hover/song:text-[#a476ff] transition-colors">
-                                    {spotify.title}
-                                </p>
-                                <p className="text-[var(--white-icon)] text-[10px] truncate">
-                                    {spotify.artist}
-                                </p>
-                            </div>
-                        </a>
-                    ) : (
-                        <div className="flex items-center justify-between">
-                            <span className="text-[var(--white-icon)] text-xs font-medium">Current Vibe</span>
-                            <span className="text-white text-[10px] font-bold px-2 py-1 rounded-lg bg-[#a476ff] shadow-[0_0_10px_rgba(164,118,255,0.3)] uppercase tracking-wider">
-                                Anime OSTs 🎧
-                            </span>
-                        </div>
-                    )}
                 </div>
-            </div>
 
-            <style dangerouslySetInnerHTML={{
-                __html: `
-        @keyframes music-bar {
-          0%, 100% { height: 4px; }
-          50% { height: 12px; }
-        }
-      `}} />
+            </div>
         </div>
     );
 };
+
+interface StatusLineProps {
+    label: string;
+    value: string | null;
+    labelColor: string;
+}
+
+const StatusLine = ({ label, value, labelColor }: StatusLineProps) => (
+    <p className="flex items-start gap-1 leading-relaxed">
+        <span className={`shrink-0 ${labelColor}`}>{label}:</span>
+        <span className="text-[#c0c0c0] break-all">{value ?? "—"}</span>
+    </p>
+);
 
 export default StatusCard;
