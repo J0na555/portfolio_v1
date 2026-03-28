@@ -5,6 +5,16 @@ const ExperienceList = () => {
 
     const experiences = [
         {
+            title: "Software Engineering Trainee  @ A2SV (Africa to Silicon Valley)",
+            date: "2024 - Present",
+            items: [
+                "Selected for a highly competitive program focused on Data Structures & Algorithms.",
+                "Solved 150+ problems on LeetCode.",
+                "Strong in problem-solving patterns (Sliding Window, Two Pointers, Prefix Sum).",
+                "Practicing interview-level problem solving.",
+            ],
+        },
+        {
             title: "Backend Developer — Freelance",
             date: "Jan 2024 - Present",
             items: [
@@ -14,7 +24,7 @@ const ExperienceList = () => {
             ],
         },
         {
-            title: "Full Stack Developer (Personal Projects)",
+            title: "Full Stack Developer",
             date: "2023 – Present",
             items: [
                 "Built full-stack web apps using Node.js, Express, and MongoDB.",
