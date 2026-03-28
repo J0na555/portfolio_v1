@@ -36,7 +36,7 @@ const StatusCard = () => {
                 const data: DevStatus = await res.json();
                 setStatus(data);
             } catch {
-                // fail silently — UI shows "—" for missing data
+                // fail silently — it shows "—" if the data is missing
             } finally {
                 setLoading(false);
             }
@@ -62,7 +62,7 @@ const StatusCard = () => {
                         <p className="text-[var(--white-icon)] text-xs uppercase tracking-wider font-medium">
                             Location
                         </p>
-                        <p className="text-[var(--white)] text-sm font-medium">Addis Ababa, ET</p>
+                        <p className="text-[var(--white)] text-sm font-medium">Adama, ET</p>
                     </div>
                 </div>
 

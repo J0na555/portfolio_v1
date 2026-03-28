@@ -5,7 +5,7 @@ const ExperienceList = () => {
 
     const experiences = [
         {
-            title: "Software Engineering Trainee  @ A2SV (Africa to Silicon Valley)",
+            title: "Software Engineering Trainee  @A2SV (Africa to Silicon Valley)",
             date: "2024 - Present",
             items: [
                 "Selected for a highly competitive program focused on Data Structures & Algorithms.",
