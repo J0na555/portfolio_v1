@@ -31,6 +31,7 @@ import { SOCIALS } from "../data/socials";
             target="_blank"
             href={social.url}
             aria-label={social.name}
+            title={social.name}
             class="text-[var(--white-icon)] hover:text-white transition duration-300 ease-in-out border border-1 border-[var(--white-icon-tr)] p-3 rounded-xl bg-[#1414149c] hover:bg-[var(--white-icon-tr)]"
           >
             <div class="size-8" set:html={social.icon} />
@@ -40,6 +41,7 @@ import { SOCIALS } from "../data/socials";
           href="/Yonas_Girma_Resume.pdf"
           download="Yonas_Girma_Resume.pdf"
           aria-label="Download CV"
+          title="Download CV"
           class="flex items-center justify-center gap-2 text-[var(--white-icon)] hover:text-white transition duration-300 ease-in-out border border-[var(--white-icon-tr)] p-3 rounded-xl bg-[#1414149c] hover:bg-[var(--white-icon-tr)]"
         >
           <img
